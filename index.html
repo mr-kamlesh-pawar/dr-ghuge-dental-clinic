@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hospital Image Gallery</title>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center; /* Centers the gallery horizontally */
+        align-items: center;     /* Centers the gallery vertically */
+        background-color: #f0f0f0;
+      }
+
+      .parent {
+        height: 100vh;           /* Full viewport height */
+        width: 90vw;             /* 90% of viewport width for nice margins on sides */
+        max-width: 1400px;       /* Optional: prevents it from getting too wide on large screens */
+        display: grid;
+        grid-template-columns: repeat(6, 1fr);
+        grid-template-rows: repeat(10, 1fr);
+        gap: 8px;
+      }
+
+      .div1 {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+      }
+      .div2 {
+        grid-row: span 2 / span 2;
+        grid-column-start: 3;
+      }
+      .div3 {
+        grid-column: span 3 / span 3;
+        grid-row: span 2 / span 2;
+        grid-column-start: 4;
+      }
+      .div4 {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+        grid-row-start: 3;
+      }
+      .div5 {
+        grid-column: span 2 / span 2;
+        grid-row: span 5 / span 5;
+        grid-column-start: 3;
+        grid-row-start: 3;
+      }
+      .div6 {
+        grid-column: span 2 / span 2;
+        grid-row: span 3 / span 3;
+        grid-column-start: 5;
+        grid-row-start: 3;
+      }
+      .div7 {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+        grid-row-start: 5;
+      }
+      .div10 {
+        grid-column: span 2 / span 2;
+        grid-row: span 4 / span 4;
+        grid-column-start: 1;
+        grid-row-start: 7;
+      }
+      .div12 {
+        grid-column: span 2 / span 2;
+        grid-row: span 2 / span 2;
+        grid-column-start: 5;
+        grid-row-start: 9;
+      }
+      .div13 {
+        grid-column: span 2 / span 2;
+        grid-row: span 3 / span 3;
+        grid-column-start: 3;
+        grid-row-start: 8;
+      }
+      .div14 {
+        grid-column: span 2 / span 2;
+        grid-row: span 3 / span 3;
+        grid-column-start: 5;
+        grid-row-start: 6;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="parent">
+      <div class="div1">
+        <img src="https://thumbs.dreamstime.com/b/modern-hospital-building-entrance-glass-doors-174424658.jpg" alt="Hospital entrance" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div2">
+        <img src="https://media.sciencephoto.com/c0/42/62/19/c0426219-800px-wm.jpg" alt="Reception" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div3">
+        <img src="https://media.gettyimages.com/id/1312706413/photo/modern-hospital-building.jpg?s=612x612&w=gi&k=20&c=1-EC4Mxf--5u4ItDIzrIOrduXlbKRnbx9xWWtiifrDo=" alt="Hospital exterior" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div4">
+        <img src="https://www.hopkinsmedicine.org/-/media/patient-care/images/patient-rooms-1.jpg" alt="Patient room" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div5">
+        <img src="https://advcloudfiles.advantech.com/cms/def31e6c-9336-4a19-a7bb-271592313bea/Content/Advantech---4-Operating-Room---The-interior-of-an-operating-room.jpg" alt="Operating room" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div6">
+        <img src="https://t3.ftcdn.net/jpg/02/96/74/64/360_F_296746476_F0wDElEXSb0Rd1tyDnsCBLVBHGAsJm3O.jpg" alt="Hospital corridor" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div7">
+        <img src="https://gumbomedical.com/wp-content/uploads/how-smart-hospital-bed-features-improve-patient-care.jpg" alt="Hospital bed" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div10">
+        <img src="https://t4.ftcdn.net/jpg/00/86/02/71/360_F_86027188_uwO6xrd8m2Fs9eKPkfeomiXpEWlIRJXC.jpg" alt="Bright hallway" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div12">
+        <img src="https://media.istockphoto.com/id/152976282/photo/front-view-of-hospital-emergency-entrance.jpg?s=612x612&w=0&k=20&c=-qOCvjJiCw5RSHSpZjLHtWVqpq9XXNmCykgkOBKCz7c=" alt="Emergency entrance" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div13">
+        <img src="https://media.gettyimages.com/id/1339523581/photo/dental-office-with-dentist-chair-dental-tools-and-waiting-area.jpg?s=612x612&w=gi&k=20&c=VuZtJXtBUzO3jSq_pjNkWxGfAQc6lAIIGr5-4KnC7-0=" alt="Waiting area" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+      <div class="div14">
+        <img src="https://t3.ftcdn.net/jpg/07/99/51/46/360_F_799514664_UdZkYCPba36vPXuRJZiWC2s5hxhG3EvV.jpg" alt="Hospital building" style="width:100%; height:100%; object-fit:cover;">
+      </div>
+    </div>
+  </body>
+</html>

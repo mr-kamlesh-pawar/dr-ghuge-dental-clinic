@@ -31,7 +31,7 @@ export default function MapSection() {
           {/* Custom Overlay for 'Premium' feel before interaction could go here, but map needs to be interactive */}
           
           <iframe 
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3780.273674686476!2d73.7656262749662!3d18.65171798246754!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2b9e67a7a1237%3A0x6310243452281024!2sAkurdi%20Railway%20Station!5e0!3m2!1sen!2sin!4v1707123456789!5m2!1sen!2sin" 
+            src="https://maps.google.com/maps?width=661&amp;height=400&amp;hl=en&amp;q=dr rahul ghuge akurdi&amp;t=p&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed" 
             width="100%" 
             height="100%" 
             style={{ border: 0, filter: "grayscale(20%) contrast(1.2) opacity(0.9)" }} 
@@ -56,7 +56,7 @@ export default function MapSection() {
               Maharashtra 411035
             </p>
             <a 
-              href="https://maps.google.com" 
+              href="https://maps.app.goo.gl/ffwDvHRsn2Fen8rZA" 
               target="_blank" 
               rel="noopener noreferrer"
               className="inline-flex items-center text-cyan-600 font-semibold text-sm hover:underline"

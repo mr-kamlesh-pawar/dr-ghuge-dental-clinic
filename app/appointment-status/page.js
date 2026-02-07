@@ -15,10 +15,10 @@ const GetReportContainer = () => {
       toast.error("Please enter an appointment ID");
       return;
     }
-    if (appointmentId.length !== 16) {
-      toast.error("Invalid appointment ID");
-      return;
-    }
+    // if (appointmentId.length !== 16) {
+    //   toast.error("Invalid appointment ID");
+    //   return;
+    // }
     setIsLoading(true);
 
     try {
@@ -26,9 +26,9 @@ const GetReportContainer = () => {
 
       if (!response.ok) {
         if (response.status === 404) {
-          toast.error("Report not found for this appointment");
+          toast.error("Appointment not found. Please check the ID.");
         } else {
-          toast.error("Failed to fetch report");
+          toast.error("Failed to fetch appointment details");
         }
         setIsLoading(false);
         return;
@@ -54,8 +54,8 @@ const GetReportContainer = () => {
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <div className="bg-teal-100 p-4 rounded-full">
-              <FileText size={40} className="text-teal-600" />
+            <div className="bg-blue-50 p-4 rounded-full">
+              <FileText size={40} className="text-blue-600" />
             </div>
           </div>
           <h1 className="text-2xl font-bold text-gray-800 mb-2">
@@ -78,7 +78,7 @@ const GetReportContainer = () => {
               type="text"
               id="appointmentId"
               value={appointmentId}
-              maxLength={16}
+              maxLength={50}
               onChange={(e) => setAppointmentId(e.target.value.trim())}
               onKeyPress={handleKeyPress}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all"
@@ -90,7 +90,7 @@ const GetReportContainer = () => {
           <button
             onClick={handleGetReport}
             disabled={isLoading}
-            className="w-full cursor-pointer px-6 py-3 bg-teal-600 text-white font-semibold rounded-lg hover:bg-teal-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full cursor-pointer px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <Search size={20} />
             {isLoading ? "Loading..." : "Get Report"}

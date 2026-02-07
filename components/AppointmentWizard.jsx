@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Calendar, User, Clock, CheckCircle, ChevronRight, ChevronLeft } from "lucide-react";
-import { mockServices } from "@/lib/mockData";
+import { Calendar, User, Clock, CheckCircle, ChevronRight, ChevronLeft, AlertCircle } from "lucide-react";
+import { toast } from "sonner";
 
 export default function AppointmentWizard() {
   const [step, setStep] = useState(1);
@@ -14,8 +14,27 @@ export default function AppointmentWizard() {
     slot: "",
     name: "",
     phone: "",
+    email: "",
   });
+  const [errors, setErrors] = useState({});
   const [isCompleted, setIsCompleted] = useState(false);
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    fetch('/api/dental-services')
+        .then(res => res.json())
+        .then(data => {
+            if (data.services) setServices(data.services);
+            setLoading(false);
+        })
+        .catch(err => {
+            console.error(err);
+            setLoading(false);
+            toast.error("Failed to load services. Please refresh the page.");
+        });
+  }, []);
 
   const steps = [
     { id: 1, title: "Service", icon: <CheckCircle className="w-5 h-5" /> },
@@ -25,34 +44,134 @@ export default function AppointmentWizard() {
 
   const timeSlots = ["10:00 AM", "11:00 AM", "12:00 PM", "04:00 PM", "05:00 PM", "06:00 PM", "07:00 PM"];
 
+  const validateStep = (currentStep) => {
+    const newErrors = {};
+    let isValid = true;
+
+    if (currentStep === 1) {
+      if (!formData.service) {
+        newErrors.service = "Please select a service to proceed.";
+        isValid = false;
+        toast.error("Please select a service to continue.");
+      }
+    } else if (currentStep === 2) {
+      if (!formData.date) {
+        newErrors.date = "Please select a preferred date.";
+        isValid = false;
+      }
+      if (!formData.slot) {
+        newErrors.slot = "Please select a time slot.";
+        isValid = false;
+      }
+      if (!isValid) toast.error("Please select both date and time.");
+    } else if (currentStep === 3) {
+      if (!formData.name.trim()) {
+        newErrors.name = "Full Name is required.";
+        isValid = false;
+      }
+      
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!formData.phone.trim()) {
+        newErrors.phone = "Phone number is required.";
+        isValid = false;
+      } else if (!phoneRegex.test(formData.phone.replace(/\D/g, ''))) {
+        newErrors.phone = "Please enter a valid 10-digit phone number.";
+        isValid = false;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!formData.email || !formData.email.trim()) {
+        newErrors.email = "Email address is required.";
+        isValid = false;
+      } else if (!emailRegex.test(formData.email)) {
+        newErrors.email = "Please enter a valid email address.";
+        isValid = false;
+      }
+
+      if (!isValid) toast.error("Please fix the errors in the form.");
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
   const handleNext = () => {
-    if (step < 3) setStep(step + 1);
-    else handleSubmit();
+    if (validateStep(step)) {
+      if (step < 3) {
+        setStep(step + 1);
+        setErrors({}); 
+      } else {
+        handleSubmit();
+      }
+    }
   };
 
   const handleBack = () => {
-    if (step > 1) setStep(step - 1);
+    if (step > 1) {
+      setStep(step - 1);
+      setErrors({});
+    }
   };
 
-  const handleSubmit = () => {
-    // Simulate API call
-    setTimeout(() => {
-        setIsCompleted(true);
-    }, 1000);
+  const handleSubmit = async () => {
+    setSubmitting(true);
+    const loadingToast = toast.loading("Booking your appointment...");
+    
+    try {
+        const payload = {
+            patient_name: formData.name,
+            phone: formData.phone,
+            email: formData.email,
+            service: formData.service,
+            appointment_date: formData.date,
+            appointment_time: formData.slot,
+            clinic: "Main Clinic",
+            notes: formData.reason
+        };
+
+        const res = await fetch('/api/book-appointment', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            toast.dismiss(loadingToast);
+            toast.success("Appointment booked successfully!", {
+                duration: 5000,
+                description: "We have sent a confirmation to your phone."
+            });
+            setIsCompleted(true);
+        } else {
+            toast.dismiss(loadingToast);
+            const errorData = await res.json().catch(() => ({}));
+            toast.error(errorData.message || "Failed to book appointment. Please try again.");
+        }
+    } catch (error) {
+        toast.dismiss(loadingToast);
+        console.error("Booking error", error);
+        toast.error("An unexpected error occurred. Please try again later.");
+    } finally {
+        setSubmitting(false);
+    }
   };
 
   const updateData = (field, value) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+        setErrors(prev => ({ ...prev, [field]: null }));
+    }
   };
 
   // Step Content Renderers
   const renderStep1 = () => (
     <div className="space-y-4">
         <h3 className="text-xl font-bold text-blue-900 mb-4">What do you need help with?</h3>
+        {loading ? <div className="text-center py-4 text-cyan-600">Loading services...</div> : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
-            {mockServices.slice(0, 6).map((service) => (
+            {services.slice(0, 8).map((service) => (
                 <div 
-                    key={service.id}
+                    key={service.id || service.$id}
                     onClick={() => updateData("service", service.name)}
                     className={`p-4 rounded-xl border cursor-pointer hover:shadow-md transition-all ${
                         formData.service === service.name 
@@ -76,6 +195,12 @@ export default function AppointmentWizard() {
                     <p className="text-xs text-gray-500 mt-1">Routine cleaning and examination</p>
                 </div>
         </div>
+        )}
+        {errors.service && (
+            <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                <AlertCircle className="w-4 h-4" /> {errors.service}
+            </p>
+        )}
     </div>
   );
 
@@ -85,10 +210,14 @@ export default function AppointmentWizard() {
             <h3 className="text-xl font-bold text-blue-900 mb-4">Select a Date</h3>
             <input 
                 type="date" 
-                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none"
+                min={new Date().toISOString().split('T')[0]}
+                className={`w-full p-3 border rounded-xl focus:ring-2 focus:ring-cyan-500 outline-none transition-colors ${
+                    errors.date ? "border-red-500 focus:border-red-500" : "border-gray-300"
+                }`}
                 onChange={(e) => updateData("date", e.target.value)}
                 value={formData.date}
             />
+            {errors.date && <p className="text-red-500 text-sm mt-1">{errors.date}</p>}
         </div>
         <div>
             <h3 className="text-xl font-bold text-blue-900 mb-4">Preferred Time</h3>
@@ -107,6 +236,7 @@ export default function AppointmentWizard() {
                     </button>
                 ))}
             </div>
+            {errors.slot && <p className="text-red-500 text-sm mt-1">{errors.slot}</p>}
         </div>
     </div>
   );
@@ -115,20 +245,45 @@ export default function AppointmentWizard() {
     <div className="space-y-4">
         <h3 className="text-xl font-bold text-blue-900 mb-4">Your Contact Details</h3>
         <div className="space-y-3">
-            <input 
-                type="text" 
-                placeholder="Full Name" 
-                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
-                value={formData.name}
-                onChange={(e) => updateData("name", e.target.value)}
-            />
-             <input 
-                type="tel" 
-                placeholder="Phone Number" 
-                className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all"
-                value={formData.phone}
-                onChange={(e) => updateData("phone", e.target.value)}
-            />
+            <div>
+                <input 
+                    type="text" 
+                    placeholder="Full Name *" 
+                    className={`w-full p-4 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all ${
+                        errors.name ? "border-red-500 ring-1 ring-red-500 bg-red-50" : "border-gray-200"
+                    }`}
+                    value={formData.name}
+                    onChange={(e) => updateData("name", e.target.value)}
+                />
+                {errors.name && <p className="text-red-500 text-sm mt-1 ml-1">{errors.name}</p>}
+            </div>
+            
+            <div>
+                <input 
+                    type="tel" 
+                    placeholder="Phone Number *" 
+                    className={`w-full p-4 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all ${
+                        errors.phone ? "border-red-500 ring-1 ring-red-500 bg-red-50" : "border-gray-200"
+                    }`}
+                    value={formData.phone}
+                    onChange={(e) => updateData("phone", e.target.value)}
+                />
+                {errors.phone && <p className="text-red-500 text-sm mt-1 ml-1">{errors.phone}</p>}
+            </div>
+
+            <div>
+                <input 
+                    type="email" 
+                    placeholder="Email Address *" 
+                    className={`w-full p-4 bg-gray-50 border rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all ${
+                        errors.email ? "border-red-500 ring-1 ring-red-500 bg-red-50" : "border-gray-200"
+                    }`}
+                    value={formData.email}
+                    onChange={(e) => updateData("email", e.target.value)}
+                />
+                {errors.email && <p className="text-red-500 text-sm mt-1 ml-1">{errors.email}</p>}
+            </div>
+
             <textarea 
                 placeholder="Any special notes? (Optional)" 
                 className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-cyan-500 outline-none transition-all resize-none h-24"
@@ -156,7 +311,7 @@ export default function AppointmentWizard() {
                         Thank you, <span className="font-semibold">{formData.name}</span>. Your appointment for <span className="font-semibold">{formData.service}</span> is set for {formData.date} at {formData.slot}.
                     </p>
                     <button 
-                        onClick={() => { setIsCompleted(false); setStep(1); setFormData({ service: "", reason: "", date: "", slot: "", name: "", phone: "" }); }}
+                        onClick={() => { setIsCompleted(false); setStep(1); setFormData({ service: "", reason: "", date: "", slot: "", name: "", phone: "", email: "" }); setErrors({}); }}
                         className="bg-blue-900 text-white px-8 py-3 rounded-full font-bold hover:bg-blue-800 transition-colors"
                     >
                         Book Another
@@ -229,14 +384,10 @@ export default function AppointmentWizard() {
                     
                     <button 
                         onClick={handleNext}
-                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-cyan-500/30 transition-all flex items-center gap-2"
-                        disabled={
-                            (step === 1 && !formData.service) ||
-                            (step === 2 && (!formData.date || !formData.slot)) ||
-                            (step === 3 && !formData.name)
-                        }
+                        disabled={submitting}
+                        className="bg-cyan-500 hover:bg-cyan-600 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:shadow-cyan-500/30 transition-all flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                         {step === 3 ? "Confirm Booking" : "Next Step"} <ChevronRight className="w-5 h-5" />
+                         {submitting ? "Processing..." : (step === 3 ? "Confirm Booking" : "Next Step")} <ChevronRight className="w-5 h-5" />
                     </button>
                 </div>
             </div>

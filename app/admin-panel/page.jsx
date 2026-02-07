@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import TopBar from "@/components/admin_models/TopBar";
 import dynamic from "next/dynamic";
 
 const AdminPageContent = dynamic(
@@ -41,7 +40,6 @@ export default function Page() {
 
   return (
     <>
-      <TopBar />
       <div>
         <AdminPageContent />
       </div>

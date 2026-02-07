@@ -65,13 +65,13 @@ export default function Hero() {
             >
               <Link
                 href="/book-appointment"
-                className="inline-block bg-teal-600 text-white font-semibold text-md px-8 py-4 rounded-lg shadow-lg hover:bg-teal-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
+                className="inline-block bg-blue-600 text-white font-semibold text-md px-8 py-4 rounded-lg shadow-lg hover:bg-blue-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 text-center"
               >
                 Book an Appointment
               </Link>
               <Link
                 href="/appointment-status"
-                className="inline-block bg-white border-2 border-slate-200 text-slate-700 font-semibold text-md px-8 py-4 rounded-lg hover:border-teal-600 hover:-translate-y-1  transition-all duration-300 text-center"
+                className="inline-block bg-white border-2 border-slate-200 text-slate-700 font-semibold text-md px-8 py-4 rounded-lg hover:border-blue-600 hover:-translate-y-1  transition-all duration-300 text-center"
               >
                 Check Appointment Status/ Report
               </Link>

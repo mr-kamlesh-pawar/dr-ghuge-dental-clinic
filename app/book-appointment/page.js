@@ -7,6 +7,7 @@ import {
 } from "@/model/emailTemplates";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect, Suspense } from "react";
+import { toast } from "sonner";
 
 const AppointmentFormContent = () => {
   const searchParams = useSearchParams();
@@ -34,6 +35,7 @@ const AppointmentFormContent = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [appointmentData, setAppointmentData] = useState(null);
   const [isLoading, setLoding] = useState(false);
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     patient_name: query.name || "",
@@ -49,9 +51,18 @@ const AppointmentFormContent = () => {
   // Fetch services
   useEffect(() => {
     const fetchCategories = async () => {
-      const res = await fetch("/api/dental-services", { cache: "no-store" });
-      const data = await res.json();
-      setCategories(data.services);
+      try {
+        const res = await fetch("/api/dental-services", { cache: "no-store" });
+        if (res.ok) {
+          const data = await res.json();
+          setCategories(data.services);
+        } else {
+          toast.error("Failed to load services");
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error("Error loading services");
+      }
     };
 
     fetchCategories();
@@ -70,6 +81,66 @@ const AppointmentFormContent = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for the field being edited
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    let isValid = true;
+
+    if (!formData.patient_name.trim()) {
+      newErrors.patient_name = "Patient Name is required";
+      isValid = false;
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = "Phone Number is required";
+      isValid = false;
+    } else if (!/^\d{10}$/.test(formData.phone.replace(/\D/g, ""))) {
+      newErrors.phone = "Enter a valid 10-digit phone number";
+      isValid = false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (formData.email && !formData.email.trim()) {
+      // Email optional Check
+    } else if (formData.email && !emailRegex.test(formData.email)) {
+      newErrors.email = "Enter a valid email address";
+      isValid = false;
+    }
+
+    if (!formData.service) {
+      newErrors.service = "Please select a service";
+      isValid = false;
+    }
+
+    if (!formData.appointment_date) {
+      newErrors.appointment_date = "Date is required";
+      isValid = false;
+    }
+
+    if (!formData.appointment_time) {
+      newErrors.appointment_time = "Time is required";
+      isValid = false;
+    }
+
+    if (!formData.clinic) {
+      newErrors.clinic = "Please select a clinic location";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+
+    // Show first error in toast for better UX
+    if (!isValid) {
+      const firstError = Object.values(newErrors)[0];
+      toast.error(firstError || "Please check the form for errors");
+    }
+
+    return isValid;
   };
 
   const sendConfirmationEmail = async (appointment) => {
@@ -123,7 +194,12 @@ const AppointmentFormContent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!validateForm()) {
+      return;
+    }
+
     setLoding(true);
+    const loadingToast = toast.loading("Booking appointment...");
 
     try {
       const result = await fetch("/api/book-appointment", {
@@ -136,16 +212,20 @@ const AppointmentFormContent = () => {
 
       if (result.ok) {
         const data = await result.json();
+        const appointment = data.data; // API returns { data: { ...appointment } }
 
         setAppointmentData({
-          id: data.appointment.appointment_id,
+          id: appointment.id,
           name: formData.patient_name,
           clinic: formData.clinic,
           date: formData.appointment_date,
         });
 
-        const appointment = data.appointment;
         await sendConfirmationEmail(appointment);
+        
+        toast.dismiss(loadingToast);
+        toast.success("Appointment booked successfully!");
+
         if (is_resheduled) {
           router.push("/admin-panel");
         } else {
@@ -162,10 +242,25 @@ const AppointmentFormContent = () => {
           notes: "",
           clinic: "",
         });
+        setErrors({});
+      } else {
+        toast.dismiss(loadingToast);
+        const errorData = await result.json().catch(() => ({}));
+        // Use the specific error message from the server if available
+        const errorMessage = errorData.error || errorData.message || "Failed to book appointment";
+        toast.error(errorMessage);
+        
+        // If there are field-specific errors from server, we could map them to state
+        if (errorData.errors && Array.isArray(errorData.errors)) {
+           // Optional: you could try to map server errors to fields if the format matches
+           console.log("Server validation errors:", errorData.errors);
+        }
       }
-      setLoding(false);
     } catch (error) {
       console.error("Error booking appointment:", error);
+      toast.dismiss(loadingToast);
+      toast.error("An unexpected error occurred");
+    } finally {
       setLoding(false);
     }
   };
@@ -186,10 +281,10 @@ const AppointmentFormContent = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 mt-16">
       <div className="max-w-3xl mx-auto">
         <div className="bg-white shadow-xl rounded-lg overflow-hidden">
-          <div className="bg-teal-600 px-6 py-4">
+          <div className="bg-blue-600 px-6 py-4">
             <h2 className="text-2xl font-bold text-white">
               Book an Appointment
             </h2>
@@ -210,10 +305,18 @@ const AppointmentFormContent = () => {
                   name="patient_name"
                   value={formData.patient_name}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                    errors.patient_name
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  }`}
                   placeholder="Abhishek Jadhav"
                 />
+                {errors.patient_name && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.patient_name}
+                  </p>
+                )}
               </div>
               <div>
                 <label
@@ -228,10 +331,14 @@ const AppointmentFormContent = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                    errors.phone ? "border-red-500 bg-red-50" : "border-gray-300"
+                  }`}
                   placeholder="+91 00000 00000"
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                )}
               </div>
               <div>
                 <label
@@ -247,9 +354,14 @@ const AppointmentFormContent = () => {
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                    errors.email ? "border-red-500 bg-red-50" : "border-gray-300"
+                  }`}
                   placeholder="patient@example.com"
                 />
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+                )}
               </div>
               <div>
                 <label
@@ -263,8 +375,11 @@ const AppointmentFormContent = () => {
                   name="service"
                   value={formData.service}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg cursor-pointer focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                  className={`w-full px-4 py-2 border rounded-lg cursor-pointer focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                    errors.service
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  }`}
                 >
                   <option className="cursor-pointer" value="">
                     Select a service
@@ -279,6 +394,9 @@ const AppointmentFormContent = () => {
                     </option>
                   ))}
                 </select>
+                {errors.service && (
+                  <p className="text-red-500 text-xs mt-1">{errors.service}</p>
+                )}
               </div>
               <div>
                 <label
@@ -295,8 +413,17 @@ const AppointmentFormContent = () => {
                   onChange={handleChange}
                   required
                   min={today}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg  focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                  className={`w-full px-4 py-2 border rounded-lg  focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                    errors.appointment_date
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  }`}
                 />
+                {errors.appointment_date && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.appointment_date}
+                  </p>
+                )}
               </div>
               <div>
                 <label
@@ -311,9 +438,17 @@ const AppointmentFormContent = () => {
                   name="appointment_time"
                   value={formData.appointment_time}
                   onChange={handleChange}
-                  required
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                  className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                    errors.appointment_time
+                      ? "border-red-500 bg-red-50"
+                      : "border-gray-300"
+                  }`}
                 />
+                {errors.appointment_time && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.appointment_time}
+                  </p>
+                )}
               </div>
             </div>
             <div>
@@ -328,13 +463,17 @@ const AppointmentFormContent = () => {
                 name="clinic"
                 value={formData.clinic}
                 onChange={handleChange}
-                required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition"
+                className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition ${
+                  errors.clinic ? "border-red-500 bg-red-50" : "border-gray-300"
+                }`}
               >
                 <option value="">Select Clinic</option>
                 <option value="Bedag">Bedag</option>
                 <option value="Miraj">Miraj</option>
               </select>
+              {errors.clinic && (
+                <p className="text-red-500 text-xs mt-1">{errors.clinic}</p>
+              )}
             </div>
             <div>
               <label
@@ -349,7 +488,7 @@ const AppointmentFormContent = () => {
                 value={formData.notes}
                 onChange={handleChange}
                 rows={4}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent outline-none transition resize-none"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cyan-500 focus:border-transparent outline-none transition resize-none"
                 placeholder="Any special requests or medical information..."
               />
             </div>
@@ -390,7 +529,7 @@ const AppointmentFormContent = () => {
               />
               <label htmlFor="confirmation" className="text-sm text-gray-700">
                 I agree to the{" "}
-                <span className="font-medium text-teal-600">
+                <span className="font-medium text-cyan-600">
                   terms and conditions
                 </span>{" "}
                 and confirm that the information provided is accurate.
@@ -400,7 +539,10 @@ const AppointmentFormContent = () => {
             <div className="flex justify-end pt-6">
               <button
                 type="submit"
-                className="px-8 py-3 bg-teal-600 text-white font-medium rounded-lg hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 transition transform hover:scale-105"
+                disabled={isLoading}
+                className={`px-8 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition transform hover:scale-105 ${
+                  isLoading ? "opacity-70 cursor-not-allowed" : ""
+                }`}
               >
                 {isLoading ? "Booking Appointment..." : "Book Appointment"}
               </button>

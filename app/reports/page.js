@@ -35,7 +35,7 @@ const ReportsPageContent = () => {
   const id = params.get("appointmentId");
   const [appointment, setAppointment] = useState({
     name: "",
-    appointment_id: "",
+    id: "",
     status: "",
     preferred_date: "",
     preferred_time: "",
@@ -72,7 +72,7 @@ const ReportsPageContent = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 pt-24">
       <div className="max-w-4xl mx-auto p-6 space-y-6">
         <div className="bg-linear-to-r from-teal-600 to-teal-700 rounded-lg shadow-lg p-6 text-white">
           <div className="flex items-start justify-between mb-4">
@@ -83,7 +83,7 @@ const ReportsPageContent = () => {
                 {appointment.status}
               </span>
               <p className="text-blue-100 text-sm mt-2">
-                ID: {appointment.appointment_id}
+                ID: {appointment.id}
               </p>
             </div>
           </div>
@@ -135,14 +135,7 @@ const ReportsPageContent = () => {
                 <p className="font-medium text-gray-900">{appointment.name}</p>
               </div>
             </div>
-
-            <div className="flex items-center gap-3">
-              <Calendar size={18} className="text-gray-400" />
-              <div>
-                <p className="text-xs text-gray-500">Age</p>
-                <p className="font-medium text-gray-900">null years</p>
-              </div>
-            </div>
+          
 
             <div className="flex items-center gap-3">
               <Phone size={18} className="text-gray-400" />
@@ -164,7 +157,7 @@ const ReportsPageContent = () => {
           )}
         </div>
         {appointment.status !== "" ? (
-          <Report id={appointment.appointment_id} />
+          <Report id={appointment.id} />
         ) : (
           <p>All reports appear here..</p>
         )}

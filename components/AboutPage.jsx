@@ -230,7 +230,7 @@ const AboutPage = () => {
             <div className="relative mb-6">
               <div className="relative h-100 w-full rounded-2xl overflow-hidden border-4 border-white shadow-lg">
                 <Image
-                  src="/doctor.png"
+                  src="https://fra.cloud.appwrite.io/v1/storage/buckets/698792db001e54562971/files/69879322002533d875d5/view?project=69870540000c714b6a66"
                   alt="Dr. Rahul Ghuge"
                   fill
                   className="object-cover"
@@ -248,7 +248,7 @@ const AboutPage = () => {
               <div className="flex justify-center gap-4 pt-4">
                 <a
                   href="tel:12345678901"
-                  className="p-2 rounded-full bg-blue-50 text-teal-600 hover:bg-blue-600 hover:text-white transition-colors"
+                  className="p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
                 >
                   <Phone className="w-5 h-5" />
                 </a>
@@ -256,7 +256,7 @@ const AboutPage = () => {
                 <div className="w-px h-8 bg-gray-200 self-center"></div>
                 <Link
                   href="/book-appointment"
-                  className="px-6 py-2 bg-teal-900 text-white rounded-full font-semibold hover:bg-teal-800 transition-colors shadow-md"
+                  className="px-6 py-2 bg-blue-900 text-white rounded-full font-semibold hover:bg-blue-800 transition-colors shadow-md"
                 >
                   Book Appointment
                 </Link>
@@ -268,7 +268,7 @@ const AboutPage = () => {
             <div className="relative mb-6">
               <div className="relative h-100 w-full rounded-2xl overflow-hidden border-4 border-white shadow-lg">
                 <Image
-                  src="/doctor.png"
+                  src="https://fra.cloud.appwrite.io/v1/storage/buckets/698792db001e54562971/files/69879322002533d875d5/view?project=69870540000c714b6a66"
                   alt="Dr. Rahul Ghuge"
                   fill
                   className="object-cover"
@@ -286,14 +286,14 @@ const AboutPage = () => {
               <div className="flex justify-center gap-4 pt-4">
                 <a
                   href="tel:12345678901"
-                  className="p-2 rounded-full bg-blue-50 text-teal-600 hover:bg-blue-600 hover:text-white transition-colors"
+                  className="p-2 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors"
                 >
                   <Phone className="w-5 h-5" />
                 </a>
                 <div className="w-px h-8 bg-gray-200 self-center"></div>
                 <Link
                   href="/book-appointment"
-                  className="px-6 py-2 bg-teal-900 text-white rounded-full font-semibold hover:bg-teal-800 transition-colors shadow-md"
+                  className="px-6 py-2 bg-blue-900 text-white rounded-full font-semibold hover:bg-blue-800 transition-colors shadow-md"
                 >
                   Book Appointment
                 </Link>

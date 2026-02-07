@@ -1,7 +1,8 @@
 import React from "react";
 import Cookies from "js-cookie";
+import { Menu } from "lucide-react";
 
-const TopBar = () => {
+const TopBar = ({ onMenuClick }) => {
   const date = new Date();
   const formatted = date.toLocaleString("en-GB", {
     day: "2-digit",
@@ -14,11 +15,21 @@ const TopBar = () => {
 
   return (
     <div className="flex items-center justify-between px-6 py-4 border-b bg-white">
-      <div>
-        <h3 className="text-lg font-semibold text-gray-800">
-          Dr Rahul Ghuge's Dental clinic
-        </h3>
-        <p className="text-sm text-gray-500">Login time: {formatted}</p>
+      <div className="flex items-center gap-4">
+        {onMenuClick && (
+          <button 
+            onClick={onMenuClick}
+            className="p-1 rounded-md hover:bg-gray-100 text-gray-500 md:hidden"
+          >
+            <Menu size={24} />
+          </button>
+        )}
+        <div>
+            <h3 className="text-lg font-semibold text-gray-800">
+            Dr Rahul Ghuge's Dental clinic
+            </h3>
+            <p className="text-sm text-gray-500">Login time: {formatted}</p>
+        </div>
       </div>
       <button
         onClick={() => {

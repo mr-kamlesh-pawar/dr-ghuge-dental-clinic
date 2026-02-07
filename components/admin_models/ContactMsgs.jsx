@@ -23,6 +23,26 @@ const ContactMessages = () => {
     setSelectedMessage(null);
   };
 
+ const formatDateTime = (
+  isoDate,
+  locale = "en-IN"
+) => {
+  if (!isoDate) return "";
+
+  const date = new Date(isoDate);
+  if (isNaN(date.getTime())) return "";
+
+  return date.toLocaleString(locale, {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true
+  });
+};
+
+
   return (
     <div className="p-6">
       <div className="overflow-x-auto bg-white rounded shadow">
@@ -40,7 +60,7 @@ const ContactMessages = () => {
           <tbody>
             {messages.data.map((msg) => (
               <tr key={msg.id} className="border-b hover:bg-gray-50 transition">
-                <td className="px-4 py-3">{msg.created_at}</td>
+                <td className="px-4 py-3">{formatDateTime(msg.$createdAt)}</td>
                 <td className="px-4 py-3 font-medium text-gray-800">
                   {msg.name}
                 </td>
@@ -134,7 +154,7 @@ const ContactMessages = () => {
                 <label className="text-sm font-semibold text-gray-600">
                   Date
                 </label>
-                <p className="text-gray-900">{selectedMessage.created_at}</p>
+                <p className="text-gray-900">{formatDateTime(selectedMessage.$createdAt)}</p>
               </div>
 
               <div>

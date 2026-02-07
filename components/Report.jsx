@@ -53,11 +53,11 @@ const Report = ({ id }) => {
         <div className="bg-white rounded-lg shadow-md p-8 max-w-md w-full text-center">
           <div className="flex justify-center mb-4">
             <div className="bg-gray-100 p-4 rounded-full">
-              <AlertCircle size={48} className="text-gray-400" />
+              <FileText size={48} className="text-gray-400" />
             </div>
           </div>
           <h2 className="text-xl font-semibold text-gray-800 mb-2">
-            No Report Found
+            Medical Report Not Yet Uploaded
           </h2>
           <p className="text-gray-600 mb-6">
             Reports will be shown here once your appointment is completed and

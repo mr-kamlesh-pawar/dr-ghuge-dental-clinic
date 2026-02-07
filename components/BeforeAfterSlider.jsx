@@ -1,115 +1,201 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeftRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Sparkles, Award } from "lucide-react";
 import Image from "next/image";
 
-export default function BeforeAfterSlider() {
+const dentalCases = [
+  {
+    id: 1,
+    before: "/teeth2.png",
+    after: "/teeth1.png",
+    title: "Porcelain Veneers Transformation",
+    description: "Complete smile makeover with custom porcelain veneers",
+    duration: "2 weeks",
+    dentist: "Dr. Rahul Ghuge",
+  },
+  {
+    id: 2,
+    before: "/teeth2.png",
+    after: "/teeth1.png",
+    title: "Teeth Whitening",
+    description: "Professional teeth whitening for a brighter smile",
+    duration: "1 hour",
+    dentist: "Dr. Smith",
+  },
+  {
+    id: 3,
+    before: "/teeth2.png",
+    after: "/teeth1.png",
+    title: "Dental Implants",
+    description: "Full mouth restoration with dental implants",
+    duration: "3 months",
+    dentist: "Dr. Johnson",
+  },
+];
+
+export default function RealisticBeforeAfterSlider() {
+  const [activeCase, setActiveCase] = useState(0);
   const [sliderPosition, setSliderPosition] = useState(50);
-  const [isDragging, setIsDragging] = useState(false);
-  const containerRef = useRef(null);
 
-  const handleMove = (event) => {
-    if (!containerRef.current) return;
+  const currentCase = dentalCases[activeCase];
 
-    const { left, width } = containerRef.current.getBoundingClientRect();
-    const pageX = event.touches ? event.touches[0].pageX : event.pageX;
-    const position = ((pageX - left) / width) * 100;
-
-    setSliderPosition(Math.min(100, Math.max(0, position)));
+  const nextCase = () => {
+    setActiveCase((p) => (p + 1) % dentalCases.length);
+    setSliderPosition(50);
   };
 
-  const handleMouseDown = () => setIsDragging(true);
-  const handleMouseUp = () => setIsDragging(false);
-
-  useEffect(() => {
-    if (isDragging) {
-      window.addEventListener("mousemove", handleMove);
-      window.addEventListener("mouseup", handleMouseUp);
-      window.addEventListener("touchmove", handleMove);
-      window.addEventListener("touchend", handleMouseUp);
-    }
-    return () => {
-      window.removeEventListener("mousemove", handleMove);
-      window.removeEventListener("mouseup", handleMouseUp);
-      window.removeEventListener("touchmove", handleMove);
-      window.removeEventListener("touchend", handleMouseUp);
-    };
-  }, [isDragging]);
+  const prevCase = () => {
+    setActiveCase((p) => (p - 1 + dentalCases.length) % dentalCases.length);
+    setSliderPosition(50);
+  };
 
   return (
-    <section className="w-full py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-6">
-        <div className="text-center mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-blue-900 mb-6 font-serif"
-          >
-            Real Results
-          </motion.h2>
-          <div className="w-24 h-1 bg-cyan-500 mx-auto rounded-full mb-6"></div>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            See the transformative power of our cosmetic and restorative dental procedures.
-          </p>
-        </div>
+    <section className="w-full py-20 bg-gradient-to-b from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-        <div className="relative w-full max-w-4xl mx-auto aspect-[16/9] md:aspect-[21/9] rounded-3xl overflow-hidden shadow-2xl border-4 border-gray-100 select-none cursor-ew-resize"
-             ref={containerRef}
-             onMouseDown={handleMouseDown}
-             onTouchStart={handleMouseDown}
-             onClick={handleMove}
+        {/* HEADER */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-16"
         >
-          {/* After Image (Background) */}
-          <div className="absolute inset-0 w-full h-full">
-            <Image
-              src="/g11.jpg" 
-              alt="After Treatment"
-              fill
-              className="object-cover"
-              priority
-            />
-            <div className="absolute top-4 right-4 bg-white/90 backdrop-blur text-blue-900 px-3 py-1 rounded-full text-sm font-bold shadow-sm z-10">
-              AFTER
-            </div>
+          <div className="inline-flex items-center gap-2 bg-blue-50 text-blue-700 px-4 py-2 rounded-full mb-4">
+            <Sparkles className="w-4 h-4" />
+            <span className="text-sm font-medium">Real Patient Results</span>
           </div>
 
-          {/* Before Image (Clipped) */}
-          <div 
-            className="absolute inset-0 w-full h-full overflow-hidden"
-            style={{ width: `${sliderPosition}%` }}
-          >
-            <Image
-              src="/g2.jpg" 
-              alt="Before Treatment"
-              fill
-              className="object-cover"
-              priority
-            />
-             {/* Filter to make 'Before' look a bit duller/different for impact if images are similar */}
-            <div className="absolute inset-0 bg-sepia-[.3] mix-blend-multiply opacity-20"></div>
-            
-            <div className="absolute top-4 left-4 bg-white/90 backdrop-blur text-gray-600 px-3 py-1 rounded-full text-sm font-bold shadow-sm z-10">
-              BEFORE
-            </div>
-          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 font-serif">
+            Transformations That <span className="text-blue-600">Speak Volumes</span>
+          </h2>
 
-          {/* Slider Handle */}
-          <div 
-            className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize z-20 shadow-[0_0_10px_rgba(0,0,0,0.3)]"
-            style={{ left: `${sliderPosition}%` }}
+          <p className="text-gray-600 text-lg max-w-3xl mx-auto">
+            See the life-changing results achieved by our expert dental team.
+          </p>
+        </motion.div>
+
+        {/* MAIN GRID */}
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+
+          {/* CASE INFO */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="space-y-6"
           >
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center transform hover:scale-110 transition-transform">
-              <ArrowLeftRight className="w-5 h-5 text-cyan-500" />
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center">
+                <Award className="w-6 h-6 text-white" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900">
+                {currentCase.title}
+              </h3>
             </div>
-          </div>
+
+            <p className="text-gray-600 text-lg">
+              {currentCase.description}
+            </p>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <div className="text-sm text-gray-500">Duration</div>
+                <div className="text-xl font-semibold">{currentCase.duration}</div>
+              </div>
+              <div className="bg-white p-4 rounded-xl border shadow-sm">
+                <div className="text-sm text-gray-500">Specialist</div>
+                <div className="text-xl font-semibold">{currentCase.dentist}</div>
+              </div>
+            </div>
+
+            {/* NAVIGATION */}
+            <div className="flex items-center gap-4">
+              <button onClick={prevCase} className="p-3 rounded-full border bg-white">
+                <ChevronLeft />
+              </button>
+
+              <button onClick={nextCase} className="p-3 rounded-full border bg-white">
+                <ChevronRight />
+              </button>
+            </div>
+          </motion.div>
+
+          {/* SLIDER */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+          >
+            <div className="relative w-full aspect-[4/3] rounded-2xl overflow-hidden border-8 border-white shadow-2xl">
+
+              {/* AFTER IMAGE */}
+              <Image
+                src={currentCase.after}
+                alt="After"
+                fill
+                className="object-cover"
+              />
+
+              {/* AFTER LABEL */}
+              <div className="absolute top-6 right-6 bg-green-600 text-white px-4 py-2 rounded-full text-sm font-bold z-10">
+                AFTER
+              </div>
+
+              {/* BEFORE IMAGE (CLIP-PATH – NO RESIZE) */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`
+                }}
+              >
+                <Image
+                  src={currentCase.before}
+                  alt="Before"
+                  fill
+                  className="object-cover"
+                />
+
+                <div className="absolute top-6 left-6 bg-gray-700 text-white px-4 py-2 rounded-full text-sm font-bold z-10">
+                  BEFORE
+                </div>
+              </div>
+
+              {/* DIVIDER LINE */}
+              <div
+                className="absolute top-0 bottom-0 w-[4px] bg-white shadow-xl z-20"
+                style={{ left: `${sliderPosition}%` }}
+              />
+
+              {/* HANDLE */}
+              <div
+                className="absolute top-1/2 w-14 h-14 bg-white rounded-full border-4 border-white shadow-2xl flex items-center justify-center z-30"
+                style={{
+                  left: `${sliderPosition}%`,
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <ChevronLeft className="text-blue-600" />
+                <ChevronRight className="text-blue-600 -ml-2" />
+              </div>
+
+              {/* RANGE INPUT */}
+              <input
+                type="range"
+                min={0}
+                max={100}
+                value={sliderPosition}
+                onChange={(e) => setSliderPosition(Number(e.target.value))}
+                className="absolute inset-0 opacity-0 cursor-ew-resize z-40"
+              />
+            </div>
+
+            <p className="mt-4 text-center text-sm text-gray-500">
+              Drag to compare • {Math.round(sliderPosition)}%
+            </p>
+          </motion.div>
         </div>
-        
-        <p className="text-center text-gray-400 text-sm mt-6 italic">
-          * Drag slider to compare results
-        </p>
       </div>
     </section>
   );

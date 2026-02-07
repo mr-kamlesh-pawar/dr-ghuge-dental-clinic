@@ -22,6 +22,9 @@ export function NavigationBar() {
   const pathname = usePathname();
   const router = useRouter();
   const isHome = pathname === "/";
+  const isAdminRequest = pathname.startsWith("/admin-panel") || pathname.startsWith("/admin-login");
+
+  if (isAdminRequest) return null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -111,7 +114,7 @@ export function NavigationBar() {
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-500 transition-all duration-300 ${
         scrolled
           ? "bg-white/95 backdrop-blur-md shadow-lg"
           : "bg-white shadow-sm"
@@ -121,7 +124,7 @@ export function NavigationBar() {
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={(e) => handleLinkClick(e, 'home')}
-            className="flex justify-center items-center focus:outline-none focus:ring-2 focus:ring-teal-500 rounded-lg"
+            className="flex justify-center items-center focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
             aria-label="Go to home"
           >
             <Image
@@ -143,21 +146,21 @@ export function NavigationBar() {
               <button
                 key={link.name}
                 onClick={(e) => handleLinkClick(e, link.id)}
-                className={`transition-all relative hover:text-teal-600 py-2 focus:outline-none  rounded px-2 ${
-                  isActive ? "text-teal-600 font-semibold" : ""
+                className={`transition-all relative hover:text-blue-600 py-2 focus:outline-none  rounded px-2 ${
+                  isActive ? "text-blue-600 font-semibold" : ""
                 }`}
               >
                 {link.name}
                 {isActive && (
-                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-teal-600 rounded-full" />
+                  <span className="absolute -bottom-1 left-0 right-0 h-0.5 bg-blue-600 rounded-full" />
                 )}
               </button>
             );
           })}
           <Link
             href="/appointment-status"
-            className={`transition hover:text-teal-600 py-2 px-2 ${
-              pathname === "/appointment-status" ? "text-teal-600 font-semibold" : ""
+            className={`transition hover:text-blue-600 py-2 px-2 ${
+              pathname === "/appointment-status" ? "text-blue-600 font-semibold" : ""
             }`}
 
             
@@ -172,14 +175,14 @@ export function NavigationBar() {
         <div className="flex items-center gap-4">
           <Link
             href="/book-appointment"
-            className="inline-flex items-center justify-center rounded-lg bg-teal-600 px-5 py-2.5 text-base font-semibold text-white hover:bg-teal-700 hover:scale-105 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-base font-semibold text-white hover:bg-blue-700 hover:scale-105 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Book Appointment
           </Link>
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden rounded-lg text-3xl p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500 transition-colors"
+            className="md:hidden rounded-lg text-3xl p-2 text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
             aria-label="Toggle menu"
             aria-expanded={open}
           >
@@ -196,8 +199,8 @@ export function NavigationBar() {
               <button
                 key={link.name}
                 onClick={(e) => handleLinkClick(e, link.id)}
-                className={`transition hover:text-teal-600 text-left py-2 px-3 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                  isHome && activeSection === link.id ? "text-teal-600 font-semibold bg-teal-50" : ""
+                className={`transition hover:text-blue-600 text-left py-2 px-3 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                  isHome && activeSection === link.id ? "text-blue-600 font-semibold bg-blue-50" : ""
                 }`}
               >
                 {link.name}
@@ -206,8 +209,8 @@ export function NavigationBar() {
             <Link
               href="/appointment-status"
               onClick={() => setOpen(false)}
-              className={`transition hover:text-teal-600 py-2 px-3 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500 ${
-                pathname === "/appointment-status" ? "text-teal-600 font-semibold bg-teal-50" : ""
+              className={`transition hover:text-blue-600 py-2 px-3 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                pathname === "/appointment-status" ? "text-blue-600 font-semibold bg-blue-50" : ""
               }`}
             >
               Check Report

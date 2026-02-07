@@ -228,7 +228,7 @@ const ContactUsForm = () => {
               <button
                 type="submit"
                 disabled={loding}
-                className="group inline-flex items-center gap-3 bg-teal-900 cursor-pointer text-white px-12 py-5 rounded-full font-bold hover:bg-teal transition-all duration-300"
+                className="group inline-flex items-center gap-3 bg-blue-900 cursor-pointer text-white px-12 py-5 rounded-full font-bold hover:bg-blue-800 transition-all duration-300"
               >
                 {loding ? "sending..." : " Send Message"}
                 <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />

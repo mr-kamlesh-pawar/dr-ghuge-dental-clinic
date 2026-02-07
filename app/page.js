@@ -22,7 +22,7 @@ export default function Home() {
       <HospitalImageGallery />
       
       <ScrollAnimation id="servicesSection" className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-blue-900 font-serif">
+        <h2 className="text-4xl font-bold text-blue-900 font-serif pt-5">
           Our Services
         </h2>
         <div className="w-24 h-1 bg-cyan-500 mx-auto mt-4 rounded-full"></div>
@@ -35,8 +35,8 @@ export default function Home() {
       
       <AppointmentWizard />
 
-      <ScrollAnimation id="ReviewsSection" className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-blue-900 font-serif">Reviews</h2>
+      <ScrollAnimation id="ReviewsSection" className="text-center mb-8 ">
+        <h2 className="text-4xl font-bold text-blue-900 font-serif mt-10 -mb-3">Reviews</h2>
         <div className="w-24 h-1 bg-cyan-500 mx-auto mt-4 rounded-full"></div>
       </ScrollAnimation>
       <ReviewsComponent />
@@ -50,8 +50,7 @@ export default function Home() {
       <AboutPage />
 
       <ScrollAnimation id="FaqSection" className="text-center mb-12">
-        <h2 className="text-4xl font-bold text-blue-900 font-serif">FAQ</h2>
-        <div className="w-24 h-1 bg-cyan-500 mx-auto mt-4 rounded-full"></div>
+      
       </ScrollAnimation>
       <FAQComponent />
 

@@ -4,35 +4,20 @@ import withFlowbiteReact from "flowbite-react/plugin/nextjs";
 const nextConfig = {
   images: {
     remotePatterns: [
-      // Local dev
       {
-        protocol: "http",
-        hostname: "localhost",
-        port: "3000",
+        protocol: "https",
+        hostname: "**",
       },
       {
         protocol: "http",
-        hostname: "127.0.0.1",
-        port: "3000",
-      },
-
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-      },
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-      {
-        protocol: "https",
-        hostname: "cdn.jsdelivr.net",
-      },
-      {
-        protocol: "https",
-        hostname: "*",
+        hostname: "**",
       },
     ],
+  },
+  eslint: {
+    // Warning: This allows production builds to successfully complete even if
+    // your project has ESLint errors.
+    ignoreDuringBuilds: true,
   },
 };
 

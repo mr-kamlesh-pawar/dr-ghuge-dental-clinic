@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
@@ -35,8 +35,19 @@ export default function Page() {
       }
     };
 
-    validate();
+    if (jwtToken) {
+      validate();
+    }
   }, [router]);
+
+  const [isClient, setIsClient] = useState(false);
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return null;
+  }
 
   return (
     <>

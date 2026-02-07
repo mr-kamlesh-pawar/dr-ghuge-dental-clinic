@@ -8,6 +8,8 @@ const COLLECTION_ID = process.env.APPWRITE_COLLECTION_USERS;
 const JWT_SECRET =
   process.env.JWT_SECRET || "your-secret-key-change-in-production";
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request) {
   try {
     const { username, password } = await request.json();

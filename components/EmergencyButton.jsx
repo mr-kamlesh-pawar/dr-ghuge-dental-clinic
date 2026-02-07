@@ -73,10 +73,10 @@ export default function EmergencyButton() {
               </p>
 
               <a 
-                href="tel:+919876543210" 
+                href="tel:+917972933329" 
                 className="block w-full bg-red-600 text-white text-lg font-bold py-4 rounded-xl shadow-lg shadow-red-500/30 hover:bg-red-700 transform active:scale-95 transition-all mb-4"
               >
-                Call Now: +91 98765 43210
+                Call Now: +91 79729 33329
               </a>
               
               <p className="text-xs text-gray-400">

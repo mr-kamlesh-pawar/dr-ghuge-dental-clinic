@@ -63,9 +63,9 @@ export async function POST(request) {
     // 4. Automatic Security Upgrade
     if (needsUpgrade) {
         try {
-            const hasedPassword = await bcrypt.hash(password, 10);
+            const hashedPassword = await bcrypt.hash(password, 10);
             await updateDocument(COLLECTION_ID, user.$id, {
-                password: hasedPassword
+                password: hashedPassword
             });
             console.log(`[Auth] User ${username} password upgraded to hash security.`);
         } catch (e) {

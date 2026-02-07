@@ -26,9 +26,9 @@ export default function Hero() {
         transition={{ delay: 1, duration: 0.5 }}
         className="absolute top-8 right-8 bg-red-600 text-white px-6 py-4 rounded-lg shadow-xl font-semibold text-lg z-10 animate-bounce"
       >
-        <a href="tel:12345678901" className="flex items-center gap-2">
+        <a href="tel:+917972933329" className="flex items-center gap-2">
           <ShieldAlert />
-          Emergency? Call: 123 4567 8901
+          Emergency? Call: +91 7972933329
         </a>
       </motion.div>
 

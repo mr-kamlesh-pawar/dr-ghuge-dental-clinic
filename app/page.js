@@ -16,8 +16,49 @@ import AppointmentWizard from "@/components/AppointmentWizard";
 import EmergencyButton from "@/components/EmergencyButton";
 
 export default function Home() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Dentist",
+    "name": "Dr. Rahul Ghuge's Dental Clinic",
+    "image": "https://www.drrahulghugedental.com/clinic.png", // Ensure this image matches a real asset or update path
+    "url": "https://www.drrahulghugedental.com",
+    "telephone": "+917972933329",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Near Akurdi Railway Station",
+      "addressLocality": "Pimpri-Chinchwad",
+      "addressRegion": "Maharashtra",
+      "postalCode": "411035",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": "18.6461",
+      "longitude": "73.7661"
+    },
+    "openingHoursSpecification": [
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "09:00",
+        "closes": "14:00"
+      },
+      {
+        "@type": "OpeningHoursSpecification",
+        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+        "opens": "16:00",
+        "closes": "21:00"
+      }
+    ],
+    "priceRange": "$$"
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Hero />
       <HospitalImageGallery />
       

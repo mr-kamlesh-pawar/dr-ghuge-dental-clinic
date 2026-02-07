@@ -6,7 +6,7 @@ import axios from "axios";
 import { CONTACT_AUTOREPLY_EMAIL } from "@/model/emailTemplates";
 
 const apiCall = async (data) => {
-  await axios.post("http://localhost:3000/api/contact-us", data);
+  await axios.post("/api/contact-us", data);
 };
 
 import Link from "next/link";

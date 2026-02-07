@@ -1,19 +1,27 @@
 "use client";
 import { X } from "lucide-react";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const getMessages = async () => {
-  const data = await axios.get("http://localhost:3000/api/contact-us");
-  return data.data;
-};
-
-const CnMessages = await getMessages();
-
 const ContactMessages = () => {
-  const [messages, setMessages] = useState(CnMessages);
+  const [messages, setMessages] = useState({ data: [] });
+  const [loading, setLoading] = useState(true);
   const [selectedMessage, setSelectedMessage] = useState(null);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await axios.get("/api/contact-us");
+        setMessages(response.data);
+      } catch (error) {
+        console.error("Failed to fetch messages:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMessages();
+  }, []);
 
   const openModal = (msg) => {
     setSelectedMessage(msg);

@@ -11,7 +11,7 @@ export default function HospitalImageGallery() {
         </h2>
         <div className="w-24 h-1 bg-cyan-500 mx-auto mt-4 rounded-full"></div>
       </div>
-      <div className="w-[98vw] max-w-7xl grid grid-cols-6 grid-rows-10 gap-4 h-325">
+      <div className="w-[98vw] max-w-7xl grid grid-cols-6 grid-rows-10 gap-4 h-[600px] md:h-[1100px]">
         {/* div1 */}
         <div className="col-span-2 row-span-2 overflow-hidden rounded-lg relative">
           <Image

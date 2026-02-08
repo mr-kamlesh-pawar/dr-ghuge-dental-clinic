@@ -13,7 +13,7 @@ import MapSection from "@/components/MapSection";
 import BeforeAfterSlider from "@/components/BeforeAfterSlider";
 import AppointmentWizard from "@/components/AppointmentWizard";
 
-import EmergencyButton from "@/components/EmergencyButton";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Home() {
   const jsonLd = {
@@ -106,7 +106,7 @@ export default function Home() {
       <ContactUsForm />
       <Footer />
       
-      <EmergencyButton />
+      <WhatsAppButton />
     </>
   );
 }

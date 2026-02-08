@@ -17,21 +17,21 @@ const dentalCases = [
   },
   {
     id: 2,
-    before: "/teeth2.png",
-    after: "/teeth1.png",
+    before: "/teeth3.png",
+    after: "/teeth4.png",
     title: "Teeth Whitening",
     description: "Professional teeth whitening for a brighter smile",
     duration: "1 hour",
-    dentist: "Dr. Smith",
+    dentist: "Dr. Rahul Ghuge",
   },
   {
     id: 3,
-    before: "/teeth2.png",
-    after: "/teeth1.png",
+    before: "/teeth5.png",
+    after: "/teeth6.png",
     title: "Dental Implants",
     description: "Full mouth restoration with dental implants",
     duration: "3 months",
-    dentist: "Dr. Johnson",
+    dentist: "Dr. Rahul Ghuge",
   },
 ];
 

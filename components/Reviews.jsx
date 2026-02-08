@@ -109,19 +109,17 @@ const ReviewsComponent = () => {
 
   // Loading Skeleton Component
   const LoadingSkeleton = () => (
-    <div className="w-full px-6 py-12">
-     
-
+    <div className="w-full px-4 sm:px-6 py-12 max-w-7xl mx-auto">
       {/* Marquee skeleton */}
       <div className="mb-12">
-        <div className="flex gap-4 overflow-hidden">
+        <div className="flex gap-6 overflow-hidden">
           {[...Array(4)].map((_, i) => (
             <div
               key={i}
-              className="w-80 h-64 bg-white rounded-xl shadow-md border border-gray-200 p-6 animate-pulse"
+              className="w-72 md:w-80 h-64 bg-white rounded-xl shadow-md border border-gray-200 p-6 animate-pulse shrink-0"
             >
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-12 h-12 bg-gray rounded-full"></div>
+                <div className="w-12 h-12 bg-gray-200 rounded-full"></div>
                 <div className="flex-1">
                   <div className="h-4 w-32 bg-gray-200 rounded mb-2"></div>
                   <div className="h-3 w-24 bg-gray-200 rounded"></div>
@@ -138,15 +136,13 @@ const ReviewsComponent = () => {
           ))}
         </div>
       </div>
-
-     
     </div>
   );
 
   // Error State Component
   if (error) {
     return (
-      <div className="w-full px-6 py-12 bg-gradient-to-b from-gray-50 to-white">
+      <div className="w-full px-4 sm:px-6 py-12 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-2xl mx-auto text-center py-12">
           <AlertCircle className="w-16 h-16 text-red-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-gray-900 mb-2">
@@ -167,7 +163,7 @@ const ReviewsComponent = () => {
   // Empty State Component
   if (!loading && reviews.length === 0) {
     return (
-      <div className="w-full px-6 py-12 bg-gradient-to-b from-gray-50 to-white">
+      <div className="w-full px-4 sm:px-6 py-12 bg-gradient-to-b from-gray-50 to-white">
         <div className="text-center mb-10">
           <h2 className="text-3xl font-bold text-gray-900">Patient Reviews</h2>
           <p className="text-gray-600">See what our patients say about us</p>
@@ -188,7 +184,7 @@ const ReviewsComponent = () => {
   }
 
   return (
-    <div className="w-full px-4 sm:px-6 py-12">
+    <div className="w-full px-4 sm:px-6 py-12 max-w-7xl mx-auto">
       {/* Header with Stats */}
      
 
@@ -201,7 +197,7 @@ const ReviewsComponent = () => {
           {reviews.length > 0 && (
             <div className="mb-12">
               <div className="mb-4 px-2">
-                <h3 className="text-lg font-semibold text-gray-700 mb-2">
+                <h3 className="text-xl md:text-2xl font-bold text-gray-800 mb-6 px-2">
                   Featured Reviews
                 </h3>
               </div>
@@ -210,13 +206,13 @@ const ReviewsComponent = () => {
                 speed={40}
                 gradient={true}
                 gradientColor="rgb(249 250 251)"
-                gradientWidth={100}
+                gradientWidth={50}
                 className="py-4"
               >
                 {reviews.slice(0, 8).map((review) => (
                   <div
                     key={review.id}
-                    className="w-72 h-64 mx-3 bg-white rounded-xl shadow-lg border border-gray-100 p-5 flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+                    className="w-72 md:w-80 h-64 mx-3 bg-white rounded-xl shadow-lg border border-gray-100 p-5 flex flex-col hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
                   >
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-cyan-400 rounded-full flex items-center justify-center">

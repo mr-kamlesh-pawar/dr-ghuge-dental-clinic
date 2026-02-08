@@ -63,6 +63,11 @@ export const metadata = {
       "max-snippet": -1,
     },
   },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }) {
@@ -71,7 +76,7 @@ export default function RootLayout({ children }) {
       <body className={arimo.className}>
         <NavigationBar/>
         {children}
-        <ScrollToTop />
+       
         <Toaster position="top-right" richColors />
       </body>
     </html>

@@ -134,13 +134,13 @@ const ContactUsForm = () => {
               <div className="space-y-4">
                 <div className="flex justify-between text-gray-600">
                   <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" /> Miraj Branch
+                    <Clock className="w-4 h-4" /> Akurdi Branch
                   </span>
                   <span>9:00 AM – 2:00 PM</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span className="flex items-center gap-2">
-                    <Clock className="w-4 h-4" /> Bedag Branch
+                    <Clock className="w-4 h-4" /> Pimpri Chinchwad Branch
                   </span>
                   <span>4:00 PM – 9:00 PM</span>
                 </div>

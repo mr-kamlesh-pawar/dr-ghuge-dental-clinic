@@ -120,7 +120,7 @@ export function NavigationBar() {
           : "bg-white shadow-sm"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 py-4">
         <div className="flex items-center justify-center gap-2">
           <button
             onClick={(e) => handleLinkClick(e, 'home')}
@@ -175,7 +175,7 @@ export function NavigationBar() {
         <div className="flex items-center gap-4">
           <Link
             href="/book-appointment"
-            className="inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-base font-semibold text-white hover:bg-blue-700 hover:scale-105 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            className="hidden md:inline-flex items-center justify-center rounded-lg bg-blue-600 px-5 py-2.5 text-base font-semibold text-white hover:bg-blue-700 hover:scale-105 transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
           >
             Book Appointment
           </Link>
@@ -193,7 +193,7 @@ export function NavigationBar() {
 
       {/* Mobile Menu */}
       {open && (
-        <div className="md:hidden border-t bg-white px-6 py-4 shadow-xl">
+        <div className="md:hidden border-t bg-white px-4 sm:px-6 py-4 shadow-xl max-h-[80vh] overflow-y-auto">
           <div className="flex flex-col gap-3 text-base font-medium text-gray-700">
             {navLinks.map((link) => (
               <button
@@ -214,6 +214,14 @@ export function NavigationBar() {
               }`}
             >
               Check Report
+            </Link>
+            
+            <Link
+              href="/book-appointment"
+              onClick={() => setOpen(false)}
+              className="mt-2 w-full text-center bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg shadow-md hover:bg-blue-700 transition-all focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            >
+              Book Appointment
             </Link>
           </div>
         </div>
